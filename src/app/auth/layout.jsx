@@ -1,9 +1,11 @@
 import React from "react";
 import Link from "next/link";
-import GppGoodIcon from "@mui/icons-material/GppGood";
-import ElectricBoltIcon from '@mui/icons-material/ElectricBolt';
-import VpnLockIcon from '@mui/icons-material/VpnLock';
-import HeadsetMicTwoToneIcon from '@mui/icons-material/HeadsetMicTwoTone';
+import {
+  Security,
+  Lightning,
+  GlobalProtection,
+  Support,
+} from "@/components/icons";
 
 export default function AuthLogin({ children }) {
   return (
@@ -25,7 +27,10 @@ export default function AuthLogin({ children }) {
 
       {/* Main */}
       <main className="flex-1 flex justify-center items-center px-4 py-4">
-        <div className="w-full max-w-5xl bg-white shadow-md rounded-xl overflow-hidden flex" style={{ height: 'calc(100vh - 180px)' }}>
+        <div
+          className="w-full max-w-5xl bg-white shadow-md rounded-xl overflow-hidden flex"
+          style={{ height: "calc(100vh - 180px)" }}
+        >
           {/* Left side: login or signup form */}
           <div className="w-2/3 p-6 overflow-y-auto">{children}</div>
 
@@ -37,8 +42,10 @@ export default function AuthLogin({ children }) {
 
               <ul className="space-y-8 mb-8">
                 <li className="flex items-start">
+                  {" "}
                   <span className="flex-shrink-0 bg-green-100 rounded-full p-2 mr-3">
-                    <GppGoodIcon className="h-5 w-5 text-green-600" />
+                    {" "}
+                    <Security className="h-5 w-5 text-green-600" />
                   </span>
                   <div>
                     <strong>Advanced Security</strong>
@@ -50,19 +57,19 @@ export default function AuthLogin({ children }) {
                 </li>
                 <li className="flex items-start">
                   <span className="flex-shrink-0 bg-green-100 rounded-full p-2 mr-3">
-                    <ElectricBoltIcon className="h-5 w-5 text-green-600"/>
+                    <Lightning className="h-5 w-5 text-green-600" />
                   </span>
                   <div>
                     <strong>Lightning Fast</strong>
                     <p className="text-gray-600 text-sm">
-                      Optimized performance ensures your security doesn't slow you
-                      down.
+                      Optimized performance ensures your security doesn't slow
+                      you down.
                     </p>
                   </div>
                 </li>
                 <li className="flex items-start">
                   <span className="flex-shrink-0 bg-green-100 rounded-full p-2 mr-3">
-                    <VpnLockIcon className="h-5 w-5 text-green-600"/>
+                    <GlobalProtection className="h-5 w-5 text-green-600" />
                   </span>
                   <div>
                     <strong>Global Protection</strong>
@@ -74,13 +81,13 @@ export default function AuthLogin({ children }) {
                 </li>
                 <li className="flex items-start">
                   <span className="flex-shrink-0 bg-green-100 rounded-full p-2 mr-3">
-                    <HeadsetMicTwoToneIcon className="h-5 w-5 text-green-600"/>
+                    <Support className="h-5 w-5 text-green-600" />
                   </span>
                   <div>
                     <strong>24/7 Support</strong>
                     <p className="text-gray-600 text-sm">
-                      Our dedicated team is always available to help you with any
-                      issues.
+                      Our dedicated team is always available to help you with
+                      any issues.
                     </p>
                   </div>
                 </li>
@@ -99,13 +106,19 @@ export default function AuthLogin({ children }) {
                 infrastructure."
               </blockquote>
               <div className="flex items-center gap-3">
-              <div>
-                <img src="/person-logo.png" alt="User Avatar" className="h-10" />
-              </div>
-              <div>
-              <p className="text-gray-800 font-medium">Saptesh Praish</p>
-              <p className="text-gray-500 text-xs">IT Enterprise, Indegene</p>
-              </div>
+                <div>
+                  <img
+                    src="/person-logo.png"
+                    alt="User Avatar"
+                    className="h-10"
+                  />
+                </div>
+                <div>
+                  <p className="text-gray-800 font-medium">Saptesh Praish</p>
+                  <p className="text-gray-500 text-xs">
+                    IT Enterprise, Indegene
+                  </p>
+                </div>
               </div>
             </div>
           </aside>
