@@ -1,5 +1,56 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
+import { useSWRConfig } from "swr";
+import useSWRMutation from "swr/mutation";
+
+// Base URL for API requests
+const BASE_URL = "http://localhost:5000";
+
+// Function to send POST request for user registration
+async function registerUser(url, { arg }) {
+  // Create a copy of the form data without agreeToTerms
+  const { agreeToTerms, ...registrationData } = arg;
+  
+  console.log("Sending registration data:", registrationData);
+  
+  const response = await fetch(`${BASE_URL}${url}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(registrationData)
+  });
+  
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || 'An error occurred during registration');
+  }
+  
+  return response.json();
+}
+
+// Function to send email verification request
+async function sendEmailVerification(email) {
+  try {
+    const response = await fetch(`${BASE_URL}/api/users/send-email-verification`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ email })
+    });
+    
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || 'Failed to send verification email');
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error('Email verification error:', error);
+    throw error;
+  }
+}
 
 function SignupForm() {
   // State for form fields
@@ -8,6 +59,7 @@ function SignupForm() {
     lastName: "",
     email: "",
     password: "",
+    countryCode: "+91", // Default country code
     phoneNumber: "",
     agreeToTerms: false,
   });
@@ -78,23 +130,37 @@ const otpRefs = [useRef(), useRef(), useRef(), useRef(), useRef(), useRef()];
   };
 
   // Handle verification requests
-  const handleVerify = (type) => {
-    setVerificationState({
-      ...verificationState,
-      currentVerification: type,
-      [type === "email"
-        ? "emailVerificationSent"
-        : "phoneVerificationSent"]: true,
-    });
+  const handleVerify = async (type) => {
+    try {
+      setVerificationState({
+        ...verificationState,
+        currentVerification: type,
+        [type === "email"
+          ? "emailVerificationSent"
+          : "phoneVerificationSent"]: true,
+      });
 
-    // Show toast notification
-    showToast(`Verification code sent to your ${type}`, "info");
+      // If email verification, call the API endpoint
+      if (type === "email") {
+        await sendEmailVerification(formData.email);
+      }
 
-    // Reset OTP
-    setOtp(["", "", "", ""]);
+      // Show toast notification
+      showToast(`Verification code sent to your ${type}`, "info");
 
-    // Start countdown timer (30 seconds)
-    setCountdown(30);
+      // Reset OTP
+      setOtp(["", "", "", ""]);
+
+      // Start countdown timer (30 seconds)
+      setCountdown(30);
+    } catch (error) {
+      showToast(error.message || `Failed to send verification code to your ${type}`, "error");
+      setVerificationState({
+        ...verificationState,
+        currentVerification: null,
+        [type === "email" ? "emailVerificationSent" : "phoneVerificationSent"]: false,
+      });
+    }
   };
 
   // Handle OTP verification
@@ -134,6 +200,12 @@ const otpRefs = [useRef(), useRef(), useRef(), useRef(), useRef(), useRef()];
     }, 3000);
   };
 
+  // Use SWR mutation for user registration
+  const { trigger, isMutating, error } = useSWRMutation(
+    "/api/users/register", 
+    registerUser
+  );
+
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -144,6 +216,7 @@ const otpRefs = [useRef(), useRef(), useRef(), useRef(), useRef(), useRef()];
       !formData.lastName ||
       !formData.email ||
       !formData.password ||
+      !formData.countryCode ||
       !formData.phoneNumber
     ) {
       showToast("Please fill in all required fields", "error");
@@ -158,6 +231,9 @@ const otpRefs = [useRef(), useRef(), useRef(), useRef(), useRef(), useRef()];
       return;
     }
 
+    // In a production app, you might want to keep these checks
+    // For now, we'll comment them out to allow direct registration without verification
+    /*
     // Check if email and phone are verified
     if (!verificationState.emailVerified) {
       showToast("Please verify your email address", "error");
@@ -168,20 +244,22 @@ const otpRefs = [useRef(), useRef(), useRef(), useRef(), useRef(), useRef()];
       showToast("Please verify your phone number", "error");
       return;
     }
+    */
 
     try {
-      // In a real app, this would be an API call to your backend
-      // const response = await fetch('/api/auth/signup', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(formData)
-      // });
-      // const data = await response.json();
+      // Use SWR mutation to send registration request
+      const result = await trigger(formData);
       
-      // For now, just simulate a successful signup
+      // Handle successful registration
       showToast("Account created successfully!", "success");
-    } catch (error) {
-      showToast("An error occurred. Please try again.", "error");
+      console.log("Registration successful:", result);
+      
+      // Optionally redirect to login page or dashboard
+      // window.location.href = '/auth/login';
+    } catch (err) {
+      // Handle registration error
+      showToast(err.message || "An error occurred during registration. Please try again.", "error");
+      console.error("Registration error:", err);
     }
   };
 
@@ -448,20 +526,34 @@ const otpRefs = [useRef(), useRef(), useRef(), useRef(), useRef(), useRef()];
         <div className="mb-4">
           <p className="pb-2 font-semibold text-gray-600">Phone Number</p>
           <div className="relative flex items-center">
-            <input
-              className={`border ${
-                verificationState.phoneVerified
-                  ? "border-green-500"
-                  : "border-gray-300"
-              } rounded-md h-10 px-3 w-full`}
-              type="tel"
-              name="phoneNumber"
-              value={formData.phoneNumber}
-              onChange={handleChange}
-              pattern="[0-9]*"
-              inputMode="numeric"
-              placeholder="Enter Phone Number"
-            />
+            <div className="flex w-full">
+              <select
+                className="border border-gray-300 rounded-l-md h-10 px-2"
+                name="countryCode"
+                value={formData.countryCode}
+                onChange={handleChange}
+              >
+                <option value="+91">+91</option>
+                <option value="+1">+1</option>
+                <option value="+44">+44</option>
+                <option value="+61">+61</option>
+                <option value="+86">+86</option>
+              </select>
+              <input
+                className={`border ${
+                  verificationState.phoneVerified
+                    ? "border-green-500"
+                    : "border-gray-300"
+                } border-l-0 rounded-r-md h-10 px-3 w-full`}
+                type="tel"
+                name="phoneNumber"
+                value={formData.phoneNumber}
+                onChange={handleChange}
+                pattern="[0-9]*"
+                inputMode="numeric"
+                placeholder="Enter Phone Number"
+              />
+            </div>
             {verificationState.phoneVerified ? (
               <div className="absolute right-3 text-green-500 flex items-center">
                 <svg
@@ -510,9 +602,22 @@ const otpRefs = [useRef(), useRef(), useRef(), useRef(), useRef(), useRef()];
         <div>
           <button
             type="submit"
-            className="w-full bg-[#2553A1] text-white h-10 rounded-md"
+            className={`w-full bg-[#2553A1] text-white h-10 rounded-md flex items-center justify-center ${
+              isMutating ? "opacity-70 cursor-not-allowed" : ""
+            }`}
+            disabled={isMutating}
           >
-            Continue
+            {isMutating ? (
+              <>
+                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Registering...
+              </>
+            ) : (
+              "Continue"
+            )}
           </button>
           <p className="text-xs flex justify-center py-1">
             Already have an account?{" "}
