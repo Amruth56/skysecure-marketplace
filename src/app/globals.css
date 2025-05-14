@@ -1,8 +1,16 @@
 @import "tailwindcss";
 
+@layer base {
+  h2 {
+    @apply text-2xl font-semibold text-gray-900;
+  }
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
 @theme inline {

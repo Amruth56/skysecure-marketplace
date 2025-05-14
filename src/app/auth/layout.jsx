@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import Image from 'next/image'
 import {
   Security,
   Lightning,
@@ -13,7 +14,7 @@ export default function AuthLogin({ children }) {
       {/* Header */}
       <header className="flex items-center justify-between px-8 py-4 bg-white shadow">
         <Link href="/">
-          <img src="/skysecure-logo.png" alt="Skysecure" className="h-8" />
+          <Image src="/skysecure-logo.png" alt="Skysecure" width={100} height={200} />
         </Link>
         <nav className="flex items-center space-x-6">
           <Link href="/help" className="text-gray-600 hover:text-gray-900">
@@ -107,10 +108,11 @@ export default function AuthLogin({ children }) {
               </blockquote>
               <div className="flex items-center gap-3">
                 <div>
-                  <img
+                  <Image
                     src="/person-logo.png"
                     alt="User Avatar"
-                    className="h-10"
+                    width={40}
+                    height={20}
                   />
                 </div>
                 <div>
