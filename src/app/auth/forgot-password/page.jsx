@@ -1,7 +1,7 @@
 import React from 'react';
-import LoginForm from '@/components/LoginForm';
+import ForgotPasswordForm from '@/components/ForgotPasswordForm';
 
-function LoginPage() {
+function ForgotPasswordPage() {
   return (
     <div className="p-6">
       {/* stepper */}
@@ -11,14 +11,14 @@ function LoginPage() {
           <p className="text-gray-500 text-sm">50%</p>
         </div>
         <div className="w-full bg-gray-200 h-2 rounded-full">
-          <div className="w-1/2 bg-bg-[#2553A1] h-2 rounded-full"></div>
+          <div className="w-1/2 bg-[#2553A1] h-2 rounded-full"></div>
         </div>
       </div> */}
 
-      {/* Login Form */}
-      <LoginForm />
+      {/* Forgot Password Form */}
+      <ForgotPasswordForm />
     </div>
   );
 }
 
-export default LoginPage;
+export default ForgotPasswordPage;

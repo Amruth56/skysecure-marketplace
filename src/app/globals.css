@@ -11,6 +11,7 @@
   --foreground: #171717;
   font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
     Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --primary: #2553A1;
 }
 
 @theme inline {
