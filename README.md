@@ -1,36 +1,119 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Skysecure Marketplace
+
+A modern, secure marketplace platform for security solutions and services.
+
+## Overview
+
+Skysecure Marketplace is a Next.js-based web application that provides a trusted platform for security solutions. The platform features a robust authentication system with email and phone verification, ensuring secure access for all users.
+
+## Technologies
+
+- **Frontend Framework**: [Next.js](https://nextjs.org/) (v15.3.2)
+- **UI Libraries**: 
+  - [React](https://reactjs.org/) (v19.0.0)
+  - [Material UI](https://mui.com/) (v7.1.0)
+  - [Tailwind CSS](https://tailwindcss.com/) (v4.1.6)
+- **Styling**: CSS Modules with Tailwind CSS
+- **Typography**: Geist Font Family
+
+## Features
+
+- **User Authentication**
+  - Secure signup with email and phone verification
+  - Multi-step registration process
+  - OTP verification system
+  - Password visibility toggle
+  - Form validation
+
+- **Responsive Design**
+  - Mobile-friendly interface
+  - Adaptive layout for different screen sizes
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- Node.js (v18 or higher recommended)
+- npm or yarn package manager
+
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/skysecure-marketplace.git
+   cd skysecure-marketplace
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
+
+3. Run the development server:
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   ```
+
+4. Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
+
+## Project Structure
+
+```
+skysecure-marketplace/
+├── public/                 # Static assets
+│   ├── person-logo.png
+│   └── skysecure-logo.png
+├── src/
+│   ├── app/                # Next.js App Router
+│   │   ├── auth/           # Authentication pages
+│   │   │   ├── login/      # Login functionality
+│   │   │   └── signup/     # Signup functionality
+│   │   ├── globals.css     # Global styles
+│   │   ├── layout.js       # Root layout
+│   │   └── page.js         # Home page
+│   └── components/         # Reusable components
+│       └── icons/          # Icon components
+├── .gitignore
+├── jsconfig.json
+├── next.config.mjs
+├── package.json
+├── postcss.config.mjs
+└── README.md
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Development
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+### Available Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `npm run dev` - Runs the development server
+- `npm run build` - Builds the application for production
+- `npm run start` - Starts the production server
+- `npm run lint` - Runs the linter to check for code quality issues
 
-## Learn More
+## Deployment
 
-To learn more about Next.js, take a look at the following resources:
+The application can be deployed to various platforms that support Next.js applications, such as:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- [Vercel](https://vercel.com/) (recommended for Next.js)
+- [Netlify](https://www.netlify.com/)
+- [AWS Amplify](https://aws.amazon.com/amplify/)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Contributing
 
-## Deploy on Vercel
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## License
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Contact
+
+For any inquiries or support, please contact the Skysecure team at support@skysecure.com.
